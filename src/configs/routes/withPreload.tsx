@@ -8,10 +8,13 @@ export function withPreload(Component: React.ComponentType) {
     const [isLoad, setIsLoad] = useState(true)
     const navigate = useNavigate()
 
-    const { onFetchProfile } = useAuth()
+    const { profile, onFetchProfile } = useAuth()
 
-    const onLoad = useCallback(async () => {
+    const fetchProfileHandler = useCallback(async () => {
       try {
+        if (profile) {
+          return
+        }
         setIsLoad(true)
         await onFetchProfile()
       } catch {
@@ -19,11 +22,11 @@ export function withPreload(Component: React.ComponentType) {
       } finally {
         setIsLoad(false)
       }
-    }, [navigate, onFetchProfile])
+    }, [profile, navigate, onFetchProfile])
 
     useEffect(() => {
-      onLoad()
-    }, [onLoad])
+      fetchProfileHandler()
+    }, [fetchProfileHandler])
 
     return <React.Fragment>{isLoad ? <>loading</> : <Component />}</React.Fragment>
   }
