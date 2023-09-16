@@ -20,6 +20,17 @@ interface IGetUserTableColumnParams {
 
 const columnHelper = createColumnHelper<Omit<IUser, 'password'>>()
 
+const userRoleTagClassName = {
+  ADMIN: 'border-gray-500 bg-gray-50 text-gray-700',
+  OWNER: 'border-gray-500 bg-gray-50 text-gray-700',
+  USER: 'border-gray-500 bg-gray-50 text-gray-700',
+}
+const userStatusTagClassName = {
+  ACTIVE: 'border-green-500 bg-green-50 text-green-700',
+  BANDED: 'border-red-500 bg-red-50 text-red-700',
+  INACTIVE: 'border-gray-500 bg-gray-50 text-gray-700',
+}
+
 const getColumns = ({
   onTriggerChangePassword,
   onTriggerDelete,
@@ -31,12 +42,28 @@ const getColumns = ({
     size: 800,
   }),
   columnHelper.accessor('role', {
-    cell: (info) => <span>{info.getValue()}</span>,
+    cell: (info) => (
+      <span
+        className={`px-4 py-1 border rounded-md bg font-semibold text-xs flex items-center w-fit ${
+          userRoleTagClassName[info.getValue()]
+        }`}
+      >
+        {info.getValue()}
+      </span>
+    ),
     header: () => <span>Role</span>,
     size: 200,
   }),
   columnHelper.accessor('status', {
-    cell: (info) => <span>{info.getValue()}</span>,
+    cell: (info) => (
+      <span
+        className={`px-4 py-1 border rounded-md font-semibold text-xs flex items-center w-fit ${
+          userStatusTagClassName[info.getValue()]
+        }`}
+      >
+        {info.getValue()}
+      </span>
+    ),
     header: () => <span>Status</span>,
     size: 200,
   }),
