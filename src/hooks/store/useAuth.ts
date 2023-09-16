@@ -7,16 +7,16 @@ export const useAuth = () => {
   const dispatch = useDispatch()
   const { profile } = useSelector((state) => state.auth)
 
-  const onFetchProfile = React.useCallback(
+  const getProfile = React.useCallback(
     () => dispatch<Omit<IUser, 'password'>>(FETCH_PROFILE_REQ()),
     [dispatch],
   )
 
-  const onSignInWithUsername = React.useCallback(
+  const signInWithUsername = React.useCallback(
     (params: Pick<IUser, 'username' | 'password'>) =>
       dispatch<Omit<IUser, 'password'>>(SIGN_IN_WITH_USERNAME_REQ(params)),
     [dispatch],
   )
 
-  return { profile, onFetchProfile, onSignInWithUsername }
+  return { profile, getProfile, signInWithUsername }
 }

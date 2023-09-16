@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ILoginForm, useAuth, useLoginForm } from '@/hooks'
 import * as Form from '@radix-ui/react-form'
 import { useMutation } from '@tanstack/react-query'
@@ -9,11 +10,11 @@ const LoginFormView: React.FC = () => {
   const { control, handleSubmit, setError } = useLoginForm()
 
   // redux
-  const { onSignInWithUsername } = useAuth()
+  const { signInWithUsername } = useAuth()
   // const notification = useNotification()
 
   const signInWithUsernameMutation = useMutation({
-    mutationFn: onSignInWithUsername,
+    mutationFn: signInWithUsername,
     onError: (e: any) => {
       setError('username', e)
     },
@@ -46,7 +47,7 @@ const LoginFormView: React.FC = () => {
                   disabled={signInWithUsernameMutation.isLoading}
                 />
               </div>
-              {fieldState.error && (
+              {!!fieldState.error && (
                 <Form.Message className='text-red-500'>{fieldState.error.message}</Form.Message>
               )}
             </Form.Field>

@@ -1,58 +1,30 @@
-import React from 'react'
-import {
-  createColumnHelper,
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
-} from '@tanstack/react-table'
 import { IUser } from '@/entities'
-
-const columnHelper = createColumnHelper<IUser>()
-
-const columns = [
-  columnHelper.accessor('username', {
-    cell: (info) => <span>{info.getValue()}</span>,
-    header: () => <span>Username</span>,
-  }),
-  columnHelper.accessor('role', {
-    cell: (info) => <span>{info.getValue()}</span>,
-    header: () => <span>Role</span>,
-  }),
-]
+import { IViewDialogRef } from '@/interfaces'
+import {
+  ChangeUserPasswordDialogView,
+  CreateUserDialogView,
+  EditUserDialogView,
+  UserTableView,
+} from '@/views'
+import React from 'react'
 
 const UserScreen: React.FC = () => {
-  const table = useReactTable({
-    data: [],
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-  })
+  const changeUserPassword = React.useRef<IViewDialogRef<Pick<IUser, 'id'>>>(null)
+  const createUserDialogRef = React.useRef<IViewDialogRef<void>>(null)
+  const editUserDialogRef = React.useRef<IViewDialogRef<Pick<IUser, 'id'>>>(null)
+
   return (
-    <div className='w-full'>
-      <table className='w-full'>
-        <thead>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <th key={header.id}>
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(header.column.columnDef.header, header.getContext())}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody>
-          {table.getRowModel().rows.map((row) => (
-            <tr key={row.id}>
-              {row.getVisibleCells().map((cell) => (
-                <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <React.Fragment>
+      <ChangeUserPasswordDialogView ref={changeUserPassword} />
+      <CreateUserDialogView ref={createUserDialogRef} />
+      <EditUserDialogView ref={editUserDialogRef} />
+      <h1 className='text-2xl font-bold border-b mb-4 pb-2'>Users</h1>
+      <UserTableView
+        onTriggerChangePassword={(params) => changeUserPassword.current?.open(params)}
+        onTriggerCreate={() => createUserDialogRef.current?.open()}
+        onTriggerEdit={(params) => editUserDialogRef.current?.open(params)}
+      />
+    </React.Fragment>
   )
 }
 
