@@ -19,7 +19,7 @@ const Sidebar: React.FC<ISidebarProps> = ({ open, toggleSidebar }) => {
 
   return (
     <div
-      className={`w-full h-full flex flex-col shadow-md bg-sky-800 z-50 ${
+      className={`h-full flex flex-col shadow-md bg-sky-800 z-50 ${
         open ? 'w-64' : 'w-24'
       } border-r`}
     >

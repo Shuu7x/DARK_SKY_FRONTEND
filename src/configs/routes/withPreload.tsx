@@ -8,7 +8,7 @@ export function withPreload(Component: React.ComponentType) {
     const [isLoad, setIsLoad] = useState(true)
     const navigate = useNavigate()
 
-    const { profile, onFetchProfile } = useAuth()
+    const { profile, getProfile } = useAuth()
 
     const fetchProfileHandler = useCallback(async () => {
       try {
@@ -16,13 +16,13 @@ export function withPreload(Component: React.ComponentType) {
           return
         }
         setIsLoad(true)
-        await onFetchProfile()
+        await getProfile()
       } catch {
         navigate('/login')
       } finally {
         setIsLoad(false)
       }
-    }, [profile, navigate, onFetchProfile])
+    }, [profile, navigate, getProfile])
 
     useEffect(() => {
       fetchProfileHandler()

@@ -12,7 +12,7 @@ const SidebarLayout: React.FC = () => {
   return (
     <div className='flex h-screen w-screen'>
       <Sidebar open={open} toggleSidebar={toggleSidebar} />
-      <div className='flex flex-col h-full w-full overflow-x-scroll bg-slate-50 relative'>
+      <div className='flex flex-col w-full h-full  overflow-x-scroll bg-slate-50 relative'>
         <Header />
         <div className='mt-16 py-4 px-6'>
           <Outlet />
