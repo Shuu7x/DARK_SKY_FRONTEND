@@ -16,18 +16,18 @@ export const deviceService: IDeviceService = {
     return apiClient.post('/devices', params)
   },
   delete: function (params: Pick<IDevice, 'id'>): Promise<void> {
-    return apiClient.delete(`/devices${params.id}`)
+    return apiClient.delete(`/devices/${params.id}`)
   },
   getList: function (): Promise<IDevice[]> {
     return apiClient.get('/devices')
   },
   getDetail: function (params: Pick<IDevice, 'id'>): Promise<IDevice> {
-    return apiClient.get(`/devices${params.id}`)
+    return apiClient.get(`/devices/${params.id}`)
   },
   update: function (
     params: Pick<IDevice, 'location' | 'name' | 'master' | 'id' | 'meta'>,
   ): Promise<IDevice> {
     const { id, ...body } = params
-    return apiClient.put(`/devices${id}`, body)
+    return apiClient.put(`/devices/${id}`, body)
   },
 }

@@ -1,7 +1,8 @@
 import { DataTable } from '@/components'
 import { getDeviceTableColumns } from '@/constants'
-import { useDevice } from '@/hooks'
-import { useQuery } from '@tanstack/react-query'
+import { IUser } from '@/entities'
+import { useAlert, useDevice } from '@/hooks'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import React from 'react'
 
 interface IDeviceTableViewProps {
@@ -13,8 +14,25 @@ const DeviceTableView: React.FC<IDeviceTableViewProps> = ({ onTriggerCreate }) =
   const [globalFilter, setGlobalFilter] = React.useState('')
 
   // Redux
-  const { list, getDeviceList } = useDevice()
+  const { list, deleteDevice, getDeviceList } = useDevice()
   useQuery({ queryFn: getDeviceList, queryKey: [] })
+  const deleteDeviceMutation = useMutation({ mutationFn: deleteDevice })
+
+  // Hooks
+  const { onOpen } = useAlert()
+
+  // Functions
+  const onTriggerDelete = React.useCallback(
+    (params: Pick<IUser, 'id'>) => {
+      onOpen({
+        title: 'Confirm to delete?',
+        description: 'If you want to delete this device, Please press "Confirm" button to confirm.',
+        onConfirm: () => deleteDeviceMutation.mutate(params),
+      })
+    },
+    [onOpen, deleteDeviceMutation],
+  )
+
   return (
     <div className='w-full'>
       <div className='flex justify-between items-center mb-2'>
@@ -34,7 +52,7 @@ const DeviceTableView: React.FC<IDeviceTableViewProps> = ({ onTriggerCreate }) =
           Create New Device
         </button>
       </div>
-      <DataTable data={list} columns={getDeviceTableColumns()} globalFilter={globalFilter} />
+      <DataTable data={list} columns={getDeviceTableColumns({onTriggerDelete})} globalFilter={globalFilter} />
     </div>
   )
 }

@@ -24,9 +24,8 @@ export const userReducer = createReducer(initState, (builder) =>
       state.list = list
     })
     .addCase(DELETE_USER_SUCCESS, (state, { payload }) => {
-      const deleteIndex = state.list.findIndex((e) => (e.id = payload.id))
-      const list = state.list.splice(deleteIndex, 1)
-      state.list = [...list]
+      const list = state.list.filter((e) => e.id !== payload.id)
+      state.list = list
     })
     .addCase(GET_USER_DETAIL_CANCEL_SUCCESS, (state) => {
       state.detail = null

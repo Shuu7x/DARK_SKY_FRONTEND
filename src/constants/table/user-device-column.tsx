@@ -2,7 +2,9 @@ import { IDevice } from '@/entities'
 import { createColumnHelper } from '@tanstack/react-table'
 import { MdDelete, MdEdit } from 'react-icons/md'
 
-// interface IGetDeviceTableColumnParams {}
+interface IGetDeviceTableColumnParams {
+  onTriggerDelete(params: Pick<IDevice, 'id'>): void
+}
 
 const deviceStatusClassName = {
   CONNECTED: 'border-green-500 bg-green-50 text-green-700',
@@ -11,7 +13,7 @@ const deviceStatusClassName = {
 
 const columnHelper = createColumnHelper<IDevice>()
 
-export const getDeviceTableColumns = () => [
+export const getDeviceTableColumns = ({onTriggerDelete}: IGetDeviceTableColumnParams) => [
   columnHelper.accessor('no', {
     cell: (info) => <span className='font-medium'>{info.getValue()}</span>,
     header: () => <span>Device No</span>,
@@ -41,12 +43,15 @@ export const getDeviceTableColumns = () => [
     size: 200,
   }),
   columnHelper.accessor('id', {
-    cell: () => (
+    cell: (info) => (
       <div className='flex items-center justify-center w-full gap-x-2'>
         <button className='rounded-full w-8 h-8  flex items-center justify-center border  text-yellow-500  bg-yellow-50 border-yellow-500 hover:bg-yellow-200'>
           <MdEdit size={16} />
         </button>
-        <button className='rounded-full w-8 h-8 flex items-center justify-center border text-red-500  bg-red-50 border-red-500 hover:bg-red-200'>
+        <button 
+          className='rounded-full w-8 h-8 flex items-center justify-center border text-red-500  bg-red-50 border-red-500 hover:bg-red-200' 
+          onClick={() => onTriggerDelete({ id:info.getValue() })}
+        >
           <MdDelete size={16} />
         </button>
       </div>
