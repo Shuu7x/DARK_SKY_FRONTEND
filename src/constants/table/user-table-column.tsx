@@ -61,13 +61,13 @@ export const getUserTableColumns = ({
     cell: (info) => (
       <div className='flex items-center justify-center w-full gap-x-2'>
         <button
-          className='rounded-full w-8 h-8  flex items-center justify-center border  text-sky-500  bg-sky-50 border-sky-500 hover:bg-sky-200'
+          className='rounded-full w-8 h-8  flex items-center justify-center border  text-yellow-500  bg-yellow-50 border-yellow-500 hover:bg-yellow-200'
           onClick={() => onTriggerEdit({ id: info.getValue() })}
         >
           <MdEdit size={16} />
         </button>
         <button
-          className='rounded-full w-8 h-8  flex items-center justify-center border  text-yellow-500  bg-yellow-50 border-yellow-500 hover:bg-yellow-200'
+          className='rounded-full w-8 h-8  flex items-center justify-center border  text-sky-500  bg-sky-50 border-sky-500 hover:bg-sky-200'
           onClick={() => onTriggerChangePassword({ id: info.getValue() })}
         >
           <MdLock size={16} />

@@ -1,4 +1,5 @@
 export { default as ChangeUserPasswordDialogView } from './change-user-password-dialog'
+export { default as CreateDeviceDialogView } from './create-device-dialog'
 export { default as CreateUserDialogView } from './create-user-dialog'
 export { default as DeviceTableView } from './device-table'
 export { default as EditUserDialogView } from './edit-user-dialog'

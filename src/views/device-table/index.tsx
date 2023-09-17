@@ -1,5 +1,7 @@
 import { DataTable } from '@/components'
 import { getDeviceTableColumns } from '@/constants'
+import { useDevice } from '@/hooks'
+import { useQuery } from '@tanstack/react-query'
 import React from 'react'
 
 interface IDeviceTableViewProps {
@@ -9,6 +11,10 @@ interface IDeviceTableViewProps {
 const DeviceTableView: React.FC<IDeviceTableViewProps> = ({ onTriggerCreate }) => {
   // State
   const [globalFilter, setGlobalFilter] = React.useState('')
+
+  // Redux
+  const { list, getDeviceList } = useDevice()
+  useQuery({ queryFn: getDeviceList, queryKey: [] })
   return (
     <div className='w-full'>
       <div className='flex justify-between items-center mb-2'>
@@ -21,7 +27,6 @@ const DeviceTableView: React.FC<IDeviceTableViewProps> = ({ onTriggerCreate }) =
             onChange={(e) => setGlobalFilter(e.target.value)}
           />
         </div>
-
         <button
           className='flex justify-center px-4 py-2 rounded bg-sky-800 text-white text-center font-bold shadow-sm hover:bg-sky-900 disabled:bg-gray-400'
           onClick={onTriggerCreate}
@@ -29,7 +34,7 @@ const DeviceTableView: React.FC<IDeviceTableViewProps> = ({ onTriggerCreate }) =
           Create New Device
         </button>
       </div>
-      <DataTable data={[]} columns={getDeviceTableColumns()} globalFilter={globalFilter} />
+      <DataTable data={list} columns={getDeviceTableColumns()} globalFilter={globalFilter} />
     </div>
   )
 }
