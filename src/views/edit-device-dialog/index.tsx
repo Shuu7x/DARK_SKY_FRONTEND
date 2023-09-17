@@ -1,60 +1,91 @@
-import { Dialog, Input, Select } from '@/components'
+import { Dialog } from '@/components'
 import { IDialogRef } from '@/components/dialog'
-import { ICreateDeviceForm, useCreateDeviceForm, useDevice } from '@/hooks'
+import Input from '@/components/input'
+import Select from '@/components/select'
+import { IDevice } from '@/entities'
+import { IEditDeviceForm, useDevice, useEditDeviceForm } from '@/hooks'
 import { IViewDialogProps, IViewDialogRef } from '@/interfaces'
 import * as Form from '@radix-ui/react-form'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import React from 'react'
 import { Controller } from 'react-hook-form'
-type ICreateDeviceDialogViewProps = IViewDialogProps
 
-const CreateDeviceDialogView: React.ForwardRefRenderFunction<
-  IViewDialogRef<void>,
-  ICreateDeviceDialogViewProps
+type IEditUserDialogProps = IViewDialogProps
+
+const EditDeviceDialogView: React.ForwardRefRenderFunction<
+  IViewDialogRef<Pick<IDevice, 'id'>>,
+  IEditUserDialogProps
 > = (_, ref) => {
   // Ref
   const modalRef = React.useRef<IDialogRef>(null)
 
-  // Form
-  const { control, handleSubmit, reset } = useCreateDeviceForm()
+  // State
+  const [deviceId, setDeviceId] = React.useState<string | null>(null)
+
+  // Forms
+  const { control, handleSubmit, reset, setValue } = useEditDeviceForm()
 
   // Redux
-  const { list, createDevice } = useDevice()
-  const createDeviceMutation = useMutation({
-    mutationFn: createDevice,
+  const { detail, list, cancelGetDeviceDetail, editDevice, getDeviceDetail } = useDevice()
+  const getDeviceDetailQuery = useQuery({
+    queryKey: ['devices', deviceId],
+    queryFn: ({ queryKey }) => (!queryKey[1] ? null : getDeviceDetail({ id: queryKey[1] })),
+  })
+  const editDeviceMutation = useMutation({
+    mutationFn: editDevice,
     onSuccess: () => {
       modalRef.current?.close()
       reset()
     },
   })
 
-  // Function
+  // Functions
   const onCloseDialog = React.useCallback(() => {
+    cancelGetDeviceDetail()
+    setDeviceId(null)
     reset()
-  }, [reset])
+  }, [cancelGetDeviceDetail, reset])
 
-  const onSubmitCreateUser = React.useCallback(
-    (formValue: ICreateDeviceForm) => {
-      createDeviceMutation.mutate(formValue)
+  const onSubmitEditDevice = React.useCallback(
+    ({ no, ...formValue }: IEditDeviceForm) => {
+      if (!detail) {
+        return
+      }
+      editDeviceMutation.mutate({ id: detail?.id, ...formValue, meta: detail?.meta })
     },
-    [createDeviceMutation],
+    [editDeviceMutation, detail],
   )
+
+  // Handlers
+  const onUserDetailFetchedHandler = React.useCallback(() => {
+    if (!detail) {
+      return
+    }
+
+    setValue('no', detail.no ?? '')
+    setValue('name', detail.name ?? '')
+    setValue('location', detail.location ?? '')
+    setValue('master', detail.master ?? '')
+  }, [detail, setValue])
+
+  // Effects
+  React.useEffect(onUserDetailFetchedHandler, [onUserDetailFetchedHandler])
 
   React.useImperativeHandle(
     ref,
     () => ({
-      open() {
+      open(params) {
+        setDeviceId(params.id as string)
         modalRef.current?.open()
       },
     }),
     [],
   )
-
   return (
-    <Dialog ref={modalRef} title='Create New Device' onClose={onCloseDialog}>
+    <Dialog ref={modalRef} title='Edit Device' onClose={onCloseDialog}>
       <Form.Root
         className='w-[500px]'
-        onSubmit={handleSubmit(onSubmitCreateUser)}
+        onSubmit={handleSubmit(onSubmitEditDevice)}
         autoComplete='off'
       >
         <div className='space-y-2 mb-8'>
@@ -67,7 +98,7 @@ const CreateDeviceDialogView: React.ForwardRefRenderFunction<
                   <Form.Label className='font-bold mb-1'>Device no</Form.Label>
                   <Form.Control asChild>
                     <Input
-                      disabled={createDeviceMutation.isLoading}
+                      disabled={editDeviceMutation.isLoading || getDeviceDetailQuery.isLoading}
                       error={!!fieldState.error}
                       value={field.value}
                       onBlur={field.onBlur}
@@ -90,7 +121,7 @@ const CreateDeviceDialogView: React.ForwardRefRenderFunction<
                   <Form.Label className='font-bold mb-1'>Device name</Form.Label>
                   <Form.Control asChild>
                     <Input
-                      disabled={createDeviceMutation.isLoading}
+                      disabled={editDeviceMutation.isLoading || getDeviceDetailQuery.isLoading}
                       error={!!fieldState.error}
                       value={field.value}
                       onBlur={field.onBlur}
@@ -116,7 +147,7 @@ const CreateDeviceDialogView: React.ForwardRefRenderFunction<
                   </Form.Label>
                   <Form.Control asChild>
                     <Input
-                      disabled={createDeviceMutation.isLoading}
+                      disabled={editDeviceMutation.isLoading || getDeviceDetailQuery.isLoading}
                       error={!!fieldState.error}
                       value={field.value}
                       onBlur={field.onBlur}
@@ -161,7 +192,7 @@ const CreateDeviceDialogView: React.ForwardRefRenderFunction<
         <Form.Submit asChild>
           <button
             className='flex justify-center w-full px-3 py-2 rounded bg-sky-600 text-white text-center font-bold shadow-sm hover:bg-sky-700 disabled:bg-gray-400'
-            disabled={createDeviceMutation.isLoading}
+            disabled={editDeviceMutation.isLoading || getDeviceDetailQuery.isLoading}
           >
             Create New Device
           </button>
@@ -171,4 +202,4 @@ const CreateDeviceDialogView: React.ForwardRefRenderFunction<
   )
 }
 
-export default React.forwardRef(CreateDeviceDialogView)
+export default React.forwardRef(EditDeviceDialogView)

@@ -1,15 +1,16 @@
 import { DataTable } from '@/components'
 import { getDeviceTableColumns } from '@/constants'
-import { IUser } from '@/entities'
+import { IDevice, IUser } from '@/entities'
 import { useAlert, useDevice } from '@/hooks'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import React from 'react'
 
 interface IDeviceTableViewProps {
   onTriggerCreate(): void
+  onTriggerEdit(params: Pick<IDevice, 'id'>): void
 }
 
-const DeviceTableView: React.FC<IDeviceTableViewProps> = ({ onTriggerCreate }) => {
+const DeviceTableView: React.FC<IDeviceTableViewProps> = ({ onTriggerCreate, onTriggerEdit }) => {
   // State
   const [globalFilter, setGlobalFilter] = React.useState('')
 
@@ -52,7 +53,11 @@ const DeviceTableView: React.FC<IDeviceTableViewProps> = ({ onTriggerCreate }) =
           Create New Device
         </button>
       </div>
-      <DataTable data={list} columns={getDeviceTableColumns({onTriggerDelete})} globalFilter={globalFilter} />
+      <DataTable
+        data={list}
+        columns={getDeviceTableColumns({ onTriggerDelete, onTriggerEdit })}
+        globalFilter={globalFilter}
+      />
     </div>
   )
 }

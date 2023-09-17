@@ -2,7 +2,6 @@
 import { Dialog, Input, Select } from '@/components'
 import { IDialogRef } from '@/components/dialog'
 import { USER_ROLE_OPTION } from '@/constants'
-import { IUser } from '@/entities'
 import { ICreateUserForm, useCreateUserForm, useUser } from '@/hooks'
 import { IViewDialogProps, IViewDialogRef } from '@/interfaces'
 import * as Form from '@radix-ui/react-form'
@@ -32,7 +31,11 @@ const CreateUserDialogView: React.ForwardRefRenderFunction<
     },
   })
 
-  // Function
+  // Functions
+  const onCloseDialog = React.useCallback(() => {
+    reset()
+  }, [reset])
+
   const onSubmitCreateUser = React.useCallback(
     ({ confirmPassword, ...formValue }: ICreateUserForm) => {
       createUserMutation.mutate(formValue)
@@ -50,7 +53,7 @@ const CreateUserDialogView: React.ForwardRefRenderFunction<
     [],
   )
   return (
-    <Dialog ref={modalRef} title='Create New User'>
+    <Dialog ref={modalRef} title='Create New User' onClose={onCloseDialog}>
       <Form.Root
         className='w-[500px]'
         onSubmit={handleSubmit(onSubmitCreateUser)}
