@@ -17,16 +17,16 @@ export const CREATE_USER_SUCCESS = createAction<Omit<IUser, 'password'>>(
   `${ACTION_NAME}/CREATE_USER_SUCCESS`,
 )
 
+export const DELETE_USER_REQ = createAction<Pick<IUser, 'id'>>(`${ACTION_NAME}/DELETE_USER_REQ`)
+export const DELETE_USER_SUCCESS = createAction<Pick<IUser, 'id'>>(
+  `${ACTION_NAME}/DELETE_USER_SUCCESS`,
+)
+
 export const EDIT_USER_REQ = createAction<Pick<IUser, 'id' | 'status' | 'role'>>(
   `${ACTION_NAME}/EDIT_USER_REQ`,
 )
 export const EDIT_USER_SUCCESS = createAction<Omit<IUser, 'password'>>(
   `${ACTION_NAME}/EDIT_USER_SUCCESS`,
-)
-
-export const DELETE_USER_REQ = createAction<Pick<IUser, 'id'>>(`${ACTION_NAME}/DELETE_USER_REQ`)
-export const DELETE_USER_SUCCESS = createAction<Pick<IUser, 'id'>>(
-  `${ACTION_NAME}/DELETE_USER_SUCCESS`,
 )
 
 export const GET_USER_DETAIL_REQ = createAction<Pick<IUser, 'id'>>(
