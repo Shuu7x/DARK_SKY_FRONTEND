@@ -98,7 +98,7 @@ const EditDeviceDialogView: React.ForwardRefRenderFunction<
                   <Form.Label className='font-bold mb-1'>Device no</Form.Label>
                   <Form.Control asChild>
                     <Input
-                      disabled={editDeviceMutation.isLoading || getDeviceDetailQuery.isLoading}
+                      disabled
                       error={!!fieldState.error}
                       value={field.value}
                       onBlur={field.onBlur}
