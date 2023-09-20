@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { PayloadAction as ReduxPayloadAction } from '@reduxjs/toolkit'
-import { IAuthReducerState, IUserReducerState } from './reducers'
+import { IAuthReducerState, IDeviceReducerState, IUserReducerState } from './reducers'
 
 export type IStoreState = {
   auth: IAuthReducerState
+  device: IDeviceReducerState
   user: IUserReducerState
 }
 

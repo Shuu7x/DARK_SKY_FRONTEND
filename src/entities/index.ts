@@ -1,2 +1,5 @@
+export * from './device'
+export * from './deviceChannel'
+export * from './deviceChannelState'
 export * from './token'
 export * from './user'

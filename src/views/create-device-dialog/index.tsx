@@ -1,59 +1,57 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Dialog, Input, Select } from '@/components'
 import { IDialogRef } from '@/components/dialog'
-import { USER_ROLE_OPTION } from '@/constants'
-import { ICreateUserForm, useCreateUserForm, useUser } from '@/hooks'
+import { ICreateDeviceForm, useCreateDeviceForm, useDevice } from '@/hooks'
 import { IViewDialogProps, IViewDialogRef } from '@/interfaces'
 import * as Form from '@radix-ui/react-form'
 import { useMutation } from '@tanstack/react-query'
 import React from 'react'
 import { Controller } from 'react-hook-form'
+type ICreateDeviceDialogViewProps = IViewDialogProps
 
-type ICreateUserDialogViewProps = IViewDialogProps
-
-const CreateUserDialogView: React.ForwardRefRenderFunction<
+const CreateDeviceDialogView: React.ForwardRefRenderFunction<
   IViewDialogRef<void>,
-  ICreateUserDialogViewProps
+  ICreateDeviceDialogViewProps
 > = (_, ref) => {
-  // Refs
+  // Ref
   const modalRef = React.useRef<IDialogRef>(null)
 
   // Form
-  const { control, handleSubmit, reset } = useCreateUserForm()
+  const { control, handleSubmit, reset } = useCreateDeviceForm()
 
   // Redux
-  const { createUser } = useUser()
-  const createUserMutation = useMutation({
-    mutationFn: createUser,
+  const { list, createDevice } = useDevice()
+  const createDeviceMutation = useMutation({
+    mutationFn: createDevice,
     onSuccess: () => {
       modalRef.current?.close()
       reset()
     },
   })
 
-  // Functions
+  // Function
   const onCloseDialog = React.useCallback(() => {
     reset()
   }, [reset])
 
   const onSubmitCreateUser = React.useCallback(
-    ({ confirmPassword, ...formValue }: ICreateUserForm) => {
-      createUserMutation.mutate(formValue)
+    (formValue: ICreateDeviceForm) => {
+      createDeviceMutation.mutate(formValue)
     },
-    [createUserMutation],
+    [createDeviceMutation],
   )
 
   React.useImperativeHandle(
     ref,
     () => ({
       open() {
-        modalRef?.current?.open()
+        modalRef.current?.open()
       },
     }),
     [],
   )
+
   return (
-    <Dialog ref={modalRef} title='Create New User' onClose={onCloseDialog}>
+    <Dialog ref={modalRef} title='Create New Device' onClose={onCloseDialog}>
       <Form.Root
         className='w-[500px]'
         onSubmit={handleSubmit(onSubmitCreateUser)}
@@ -62,14 +60,14 @@ const CreateUserDialogView: React.ForwardRefRenderFunction<
         <div className='space-y-2 mb-8'>
           <Controller
             control={control}
-            name='username'
+            name='no'
             render={({ field, fieldState }) => (
               <Form.Field name={field.name}>
                 <div className='flex flex-col'>
-                  <Form.Label className='font-bold mb-1'>Username</Form.Label>
+                  <Form.Label className='font-bold mb-1'>Device no</Form.Label>
                   <Form.Control asChild>
                     <Input
-                      disabled={createUserMutation.isLoading}
+                      disabled={createDeviceMutation.isLoading}
                       error={!!fieldState.error}
                       value={field.value}
                       onBlur={field.onBlur}
@@ -85,61 +83,73 @@ const CreateUserDialogView: React.ForwardRefRenderFunction<
           />
           <Controller
             control={control}
-            name='role'
+            name='name'
             render={({ field, fieldState }) => (
               <Form.Field name={field.name}>
                 <div className='flex flex-col'>
-                  <Form.Label className='font-bold mb-1'>Role</Form.Label>
+                  <Form.Label className='font-bold mb-1'>Device name</Form.Label>
+                  <Form.Control asChild>
+                    <Input
+                      disabled={createDeviceMutation.isLoading}
+                      error={!!fieldState.error}
+                      value={field.value}
+                      onBlur={field.onBlur}
+                      onChange={field.onChange}
+                    />
+                  </Form.Control>
+                </div>
+                {fieldState.error && (
+                  <Form.Message className='text-red-500'>{fieldState.error.message}</Form.Message>
+                )}
+              </Form.Field>
+            )}
+          />
+          <Controller
+            control={control}
+            name='location'
+            render={({ field, fieldState }) => (
+              <Form.Field name={field.name}>
+                <div className='flex flex-col'>
+                  <Form.Label className='font-bold mb-1'>
+                    Location
+                    <span className='text-gray-400 text-sm font-light ml-1'>(Optional)</span>
+                  </Form.Label>
+                  <Form.Control asChild>
+                    <Input
+                      disabled={createDeviceMutation.isLoading}
+                      error={!!fieldState.error}
+                      value={field.value}
+                      onBlur={field.onBlur}
+                      onChange={field.onChange}
+                    />
+                  </Form.Control>
+                </div>
+                {fieldState.error && (
+                  <Form.Message className='text-red-500'>{fieldState.error.message}</Form.Message>
+                )}
+              </Form.Field>
+            )}
+          />
+          <Controller
+            control={control}
+            name='master'
+            render={({ field, fieldState }) => (
+              <Form.Field name={field.name}>
+                <div className='flex flex-col'>
+                  <Form.Label className='font-bold mb-1'>
+                    Master device
+                    <span className='text-gray-400 text-sm font-light ml-1'>(Optional)</span>
+                  </Form.Label>
                   <Form.Control asChild>
                     <Select
-                      disabled={createUserMutation.isLoading}
                       {...field}
-                      option={USER_ROLE_OPTION}
+                      value={field.value ?? ''}
+                      option={list
+                        .filter((e) => e.master === null)
+                        .map((e) => ({ label: e.no, value: e.id }))}
                       placeholder='Please select one'
                     />
                   </Form.Control>
-                </div>
-                {!!fieldState.error && (
-                  <Form.Message className='text-red-500'>{fieldState.error.message}</Form.Message>
-                )}
-              </Form.Field>
-            )}
-          />
-          <Controller
-            control={control}
-            name='password'
-            render={({ field, fieldState }) => (
-              <Form.Field name={field.name}>
-                <div className='flex flex-col'>
-                  <Form.Label className='font-bold mb-1'>Password</Form.Label>
-                  <Form.Control asChild>
-                    <Input
-                      disabled={createUserMutation.isLoading}
-                      {...field}
-                      type='password'
-                      error={!!fieldState.error}
-                    />
-                  </Form.Control>
-                </div>
-                {!!fieldState.error && (
-                  <Form.Message className='text-red-500'>{fieldState.error.message}</Form.Message>
-                )}
-              </Form.Field>
-            )}
-          />
-          <Controller
-            control={control}
-            name='confirmPassword'
-            render={({ field, fieldState }) => (
-              <Form.Field name={field.name}>
-                <div className='flex flex-col'>
-                  <Form.Label className='font-bold mb-1'>Confirm password</Form.Label>
-                  <Input
-                    disabled={createUserMutation.isLoading}
-                    {...field}
-                    type='password'
-                    error={!!fieldState.error}
-                  />
                 </div>
                 {!!fieldState.error && (
                   <Form.Message className='text-red-500'>{fieldState.error.message}</Form.Message>
@@ -151,9 +161,9 @@ const CreateUserDialogView: React.ForwardRefRenderFunction<
         <Form.Submit asChild>
           <button
             className='flex justify-center w-full px-3 py-2 rounded bg-sky-600 text-white text-center font-bold shadow-sm hover:bg-sky-700 disabled:bg-gray-400'
-            disabled={createUserMutation.isLoading}
+            disabled={createDeviceMutation.isLoading}
           >
-            Create New User
+            Create New Device
           </button>
         </Form.Submit>
       </Form.Root>
@@ -161,4 +171,4 @@ const CreateUserDialogView: React.ForwardRefRenderFunction<
   )
 }
 
-export default React.forwardRef(CreateUserDialogView)
+export default React.forwardRef(CreateDeviceDialogView)

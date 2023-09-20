@@ -6,7 +6,7 @@ import { IEditUserForm, useEditUserForm, useUser } from '@/hooks'
 import { IViewDialogProps, IViewDialogRef } from '@/interfaces'
 import * as Form from '@radix-ui/react-form'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import React, { useEffect, useImperativeHandle } from 'react'
+import React from 'react'
 import { Controller } from 'react-hook-form'
 
 type IEditUserDialogProps = IViewDialogProps
@@ -42,7 +42,8 @@ const EditUserDialogView: React.ForwardRefRenderFunction<IViewDialogRef, IEditUs
   const onCloseDialog = React.useCallback(() => {
     cancelGetUserDetail()
     setUserId('')
-  }, [cancelGetUserDetail])
+    reset()
+  }, [cancelGetUserDetail, reset])
 
   const onSubmitEditUser = React.useCallback(
     ({ username, ...formValue }: IEditUserForm) => {
@@ -66,9 +67,9 @@ const EditUserDialogView: React.ForwardRefRenderFunction<IViewDialogRef, IEditUs
   }, [detail, setValue])
 
   // Effects
-  useEffect(onUserDetailFetchedHandler, [onUserDetailFetchedHandler])
+  React.useEffect(onUserDetailFetchedHandler, [onUserDetailFetchedHandler])
 
-  useImperativeHandle(
+  React.useImperativeHandle(
     ref,
     () => ({
       open(params) {

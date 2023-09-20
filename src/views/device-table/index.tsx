@@ -1,42 +1,37 @@
 import { DataTable } from '@/components'
-import { getUserTableColumns } from '@/constants'
-import { IUser } from '@/entities'
-import { useAlert, useUser } from '@/hooks'
+import { getDeviceTableColumns } from '@/constants'
+import { IDevice, IUser } from '@/entities'
+import { useAlert, useDevice } from '@/hooks'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import React from 'react'
 
-interface IUserTableViewProps {
-  onTriggerChangePassword(params: Pick<IUser, 'id'>): void
+interface IDeviceTableViewProps {
   onTriggerCreate(): void
-  onTriggerEdit(params: Pick<IUser, 'id'>): void
+  onTriggerEdit(params: Pick<IDevice, 'id'>): void
 }
 
-const UserTableView: React.FC<IUserTableViewProps> = ({
-  onTriggerChangePassword,
-  onTriggerCreate,
-  onTriggerEdit,
-}) => {
+const DeviceTableView: React.FC<IDeviceTableViewProps> = ({ onTriggerCreate, onTriggerEdit }) => {
   // State
   const [globalFilter, setGlobalFilter] = React.useState('')
 
+  // Redux
+  const { list, deleteDevice, getDeviceList } = useDevice()
+  useQuery({ queryFn: getDeviceList, queryKey: [] })
+  const deleteDeviceMutation = useMutation({ mutationFn: deleteDevice })
+
   // Hooks
   const { onOpen } = useAlert()
-
-  // Redux
-  const { list, deleteUser, getUserList } = useUser()
-  useQuery({ queryFn: getUserList, queryKey: [] })
-  const deleteUserMutation = useMutation({ mutationFn: deleteUser })
 
   // Functions
   const onTriggerDelete = React.useCallback(
     (params: Pick<IUser, 'id'>) => {
       onOpen({
         title: 'Confirm to delete?',
-        description: 'If you want to delete this user, Please press "Confirm" button to confirm.',
-        onConfirm: () => deleteUserMutation.mutate(params),
+        description: 'If you want to delete this device, Please press "Confirm" button to confirm.',
+        onConfirm: () => deleteDeviceMutation.mutate(params),
       })
     },
-    [onOpen, deleteUserMutation],
+    [onOpen, deleteDeviceMutation],
   )
 
   return (
@@ -51,21 +46,20 @@ const UserTableView: React.FC<IUserTableViewProps> = ({
             onChange={(e) => setGlobalFilter(e.target.value)}
           />
         </div>
-
         <button
           className='flex justify-center px-4 py-2 rounded bg-sky-800 text-white text-center font-bold shadow-sm hover:bg-sky-900 disabled:bg-gray-400'
           onClick={onTriggerCreate}
         >
-          Create New User
+          Create New Device
         </button>
       </div>
       <DataTable
         data={list}
-        columns={getUserTableColumns({ onTriggerChangePassword, onTriggerDelete, onTriggerEdit })}
+        columns={getDeviceTableColumns({ onTriggerDelete, onTriggerEdit })}
         globalFilter={globalFilter}
       />
     </div>
   )
 }
 
-export default UserTableView
+export default DeviceTableView
