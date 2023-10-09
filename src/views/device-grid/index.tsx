@@ -3,7 +3,11 @@ import { useQuery } from '@tanstack/react-query'
 import React from 'react'
 import { MdMoreHoriz } from 'react-icons/md'
 
-const DeviceGridView: React.FC = () => {
+interface IDeviceGridViewProps {
+  onExpand(id: string): void
+}
+
+const DeviceGridView: React.FC<IDeviceGridViewProps> = ({ onExpand }) => {
   const { list, getDeviceList } = useDevice()
   useQuery({ queryFn: getDeviceList, queryKey: [] })
 
@@ -14,7 +18,10 @@ const DeviceGridView: React.FC = () => {
         {list.map((item) => (
           <div className='col-span-4' key={`device-grid-card-${item.id}`}>
             <div className='flex flex-col relative justify-between shadow-sm border border-slate-400 rounded-md p-4 h-32'>
-              <button className='absolute top-3 right-3 rounded-full w-8 h-8  flex items-center justify-center border  text-sky-500  bg-sky-50 border-sky-500 hover:bg-sky-200'>
+              <button
+                className='absolute top-3 right-3 rounded-full w-8 h-8  flex items-center justify-center border  text-sky-500  bg-sky-50 border-sky-500 hover:bg-sky-200'
+                onClick={() => onExpand(item.id as string)}
+              >
                 <MdMoreHoriz />
               </button>
               <div className=''>
