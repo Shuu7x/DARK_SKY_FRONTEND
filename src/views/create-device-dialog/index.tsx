@@ -145,7 +145,7 @@ const CreateDeviceDialogView: React.ForwardRefRenderFunction<
                       {...field}
                       value={field.value ?? ''}
                       option={list
-                        .filter((e) => e.master === null)
+                        .filter((e) => !e.master)
                         .map((e) => ({ label: e.no, value: e.id }))}
                       placeholder='Please select one'
                     />

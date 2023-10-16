@@ -1,28 +1,19 @@
-import {
-  CREATE_DEVICE_REQ,
-  DELETE_DEVICE_REQ,
-  EDIT_DEVICE_REQ,
-  GET_DEVICE_DETAIL_CANCEL_REQ,
-  GET_DEVICE_DETAIL_REQ,
-  GET_DEVICE_LIST_REQ,
-} from '@/store/actions'
+import * as DEVICE_ACTION from '@/store/actions'
 import { all, takeEvery } from 'redux-saga/effects'
-import {
-  createDeviceWorker,
-  deleteDeviceWorker,
-  editDeviceWorker,
-  getDeviceDetailCancelWorker,
-  getDeviceDetailWorker,
-  getDeviceListWorker,
-} from './workers'
+import * as DEVICE_WORKER from './workers'
 
 export function* deviceWatcher() {
   yield all([
-    takeEvery(CREATE_DEVICE_REQ.type, createDeviceWorker),
-    takeEvery(DELETE_DEVICE_REQ.type, deleteDeviceWorker),
-    takeEvery(EDIT_DEVICE_REQ.type, editDeviceWorker),
-    takeEvery(GET_DEVICE_DETAIL_CANCEL_REQ.type, getDeviceDetailCancelWorker),
-    takeEvery(GET_DEVICE_DETAIL_REQ.type, getDeviceDetailWorker),
-    takeEvery(GET_DEVICE_LIST_REQ.type, getDeviceListWorker),
+    takeEvery(DEVICE_ACTION.CREATE_DEVICE_REQ.type, DEVICE_WORKER.createDeviceWorker),
+    takeEvery(DEVICE_ACTION.DELETE_DEVICE_REQ.type, DEVICE_WORKER.deleteDeviceWorker),
+    takeEvery(DEVICE_ACTION.EDIT_DEVICE_REQ.type, DEVICE_WORKER.editDeviceWorker),
+    takeEvery(
+      DEVICE_ACTION.GET_DEVICE_DETAIL_CANCEL_REQ.type,
+      DEVICE_WORKER.getDeviceDetailCancelWorker,
+    ),
+    takeEvery(DEVICE_ACTION.GET_DEVICE_DETAIL_REQ.type, DEVICE_WORKER.getDeviceDetailWorker),
+    takeEvery(DEVICE_ACTION.GET_DEVICE_LIST_REQ.type, DEVICE_WORKER.getDeviceListWorker),
+
+    takeEvery(DEVICE_ACTION.GET_DEVICE_STATE_LIST_REQ.type, DEVICE_WORKER.getDeviceStateListWorker),
   ])
 }

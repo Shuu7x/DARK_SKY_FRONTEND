@@ -1,4 +1,5 @@
-import { IDevice } from '@/entities'
+import { IDevice, IDeviceChannelState } from '@/entities'
+import { objToURLSearchParams } from '@/helpers'
 import { apiClient } from '@/libs'
 
 export interface IDeviceService {
@@ -7,6 +8,7 @@ export interface IDeviceService {
   getList(): Promise<IDevice[]>
   getDetail(params: Pick<IDevice, 'id'>): Promise<IDevice>
   update(params: Pick<IDevice, 'location' | 'name' | 'master' | 'id' | 'meta'>): Promise<IDevice>
+  getDeviceStateList(filterParams: Record<string, string | number>): Promise<IDeviceChannelState[]>
 }
 
 export const deviceService: IDeviceService = {
@@ -29,5 +31,12 @@ export const deviceService: IDeviceService = {
   ): Promise<IDevice> {
     const { id, ...body } = params
     return apiClient.put(`/devices/${id}`, body)
+  },
+
+  // Device State
+  getDeviceStateList: function (
+    filterParams: Record<string, string | number>,
+  ): Promise<IDeviceChannelState[]> {
+    return apiClient.get(`/states${objToURLSearchParams(filterParams)}`)
   },
 }

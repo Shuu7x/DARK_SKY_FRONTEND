@@ -1,4 +1,4 @@
-import { IDevice } from '@/entities'
+import { IDevice, IDeviceChannelState } from '@/entities'
 import { createAction } from '@reduxjs/toolkit'
 
 const ACTION_NAME = '@/DEVICE'
@@ -36,4 +36,11 @@ export const GET_DEVICE_DETAIL_CANCEL_SUCCESS = createAction(
 export const GET_DEVICE_LIST_REQ = createAction(`${ACTION_NAME}/GET_DEVICE_LIST_REQ`)
 export const GET_DEVICE_LIST_SUCCESS = createAction<IDevice[]>(
   `${ACTION_NAME}/GET_DEVICE_LIST_SUCCESS`,
+)
+
+export const GET_DEVICE_STATE_LIST_REQ = createAction<Record<string, string | number>>(
+  `${ACTION_NAME}/GET_DEVICE_STATE_LIST_REQ`,
+)
+export const GET_DEVICE_STATE_LIST_SUCCESS = createAction<IDeviceChannelState[]>(
+  `${ACTION_NAME}/GET_DEVICE_STATE_LIST_SUCCESS`,
 )

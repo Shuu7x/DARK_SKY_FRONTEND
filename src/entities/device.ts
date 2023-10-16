@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { IDeviceChannel } from './deviceChannel'
 
 export type DeviceStatus = 'CONNECTED' | 'DISCONNECTED'

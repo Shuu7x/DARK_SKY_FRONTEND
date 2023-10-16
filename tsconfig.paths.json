@@ -8,6 +8,7 @@
       "@/constants": ["./constants/index.ts"],
       "@/contexts": ["./contexts/index.ts"],
       "@/entities": ["./entities/index.ts"],
+      "@/helpers": ["./helpers/index.ts"],
       "@/hooks": ["./hooks/index.ts"],
       "@/interfaces": ["./interfaces/index.ts"],
       "@/screens": ["./screens/index.ts"],

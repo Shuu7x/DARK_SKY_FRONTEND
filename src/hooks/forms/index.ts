@@ -1,4 +1,5 @@
 export * from './useChangePasswordForm'
+export * from './useControlDeviceLampForm'
 export * from './useCreateDeviceForm'
 export * from './useCreateUserForm'
 export * from './useEditDeviceForm'
