@@ -50,8 +50,6 @@ const CreateDeviceDialogView: React.ForwardRefRenderFunction<
     [],
   )
 
-  console.log('list', list)
-
   return (
     <Dialog ref={modalRef} title='Create New Device' onClose={onCloseDialog}>
       <Form.Root

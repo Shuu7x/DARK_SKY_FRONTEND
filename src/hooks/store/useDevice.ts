@@ -7,8 +7,9 @@ import {
   GET_DEVICE_DETAIL_CANCEL_REQ,
   GET_DEVICE_DETAIL_REQ,
   GET_DEVICE_LIST_REQ,
+  GET_DEVICE_STATE_LIST_REQ,
 } from '@/store/actions'
-import { IDevice } from '@/entities'
+import { IDevice, IDeviceChannelState } from '@/entities'
 
 export const useDevice = () => {
   const { detail, list } = useSelector((state) => state.device)
@@ -46,6 +47,12 @@ export const useDevice = () => {
     [dispatch],
   )
 
+  const getDeviceStateList = React.useCallback(
+    (params: Record<string, string | number>) =>
+      dispatch<IDeviceChannelState[]>(GET_DEVICE_STATE_LIST_REQ(params)),
+    [dispatch],
+  )
+
   return {
     detail,
     list,
@@ -53,7 +60,9 @@ export const useDevice = () => {
     createDevice,
     editDevice,
     deleteDevice,
+
     getDeviceDetail,
     getDeviceList,
+    getDeviceStateList,
   }
 }

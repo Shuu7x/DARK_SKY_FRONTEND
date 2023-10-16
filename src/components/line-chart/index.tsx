@@ -24,7 +24,7 @@ const LineChartComponent: React.FC<ILineChartProps> = ({
   return (
     <div className='flex flex-col w-full'>
       {title && (
-        <div className='flex pb-2 border-b w-full'>
+        <div className='flex pb-3 border-b w-full'>
           {Icon && Icon}
           <span className=' font-semibold'>{title}</span>
         </div>

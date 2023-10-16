@@ -2,3 +2,4 @@ Dockerfile
 dist/
 node_modules/
 k8s/
+webpack.config.js

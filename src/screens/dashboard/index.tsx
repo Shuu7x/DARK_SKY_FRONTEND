@@ -7,8 +7,8 @@ import {
   ControlDeviceLogCardView,
   DeviceGridView,
   DeviceStatusDialogView,
-  MasterControlCardView,
-  WeatherCardView,
+  // MasterControlCardView,
+  // WeatherCardView,
 } from '@/views'
 import React from 'react'
 
@@ -20,14 +20,14 @@ const DashBoardScreen: React.FC = () => {
       <ChangeLocationDialogView ref={changeLocationDialogRef} />
       <DeviceStatusDialogView ref={deviceStatusDialogRef} />
       <div className='flex flex-col gap-2 '>
-        <div className='grid grid-cols-12 space-x-2'>
+        {/* <div className='grid grid-cols-12 space-x-2'>
           <div className=' col-span-8'>
             <WeatherCardView />
           </div>
           <div className='col-span-4'>
             <MasterControlCardView />
           </div>
-        </div>
+        </div> */}
         <div className='grid grid-cols-12 space-x-2'>
           <div className='col-span-3'>
             <div className='bg-white shadow-md border rounded-md p-4'>
