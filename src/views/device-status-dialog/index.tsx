@@ -180,7 +180,7 @@ const DeviceStatusDialogView: React.ForwardRefRenderFunction<
                 render={({ field }) => (
                   <React.Fragment>
                     <span className='w-full flex justify-between'>
-                      <label className='font-semibold'>Brightness</label>
+                      <label className='font-semibold'>Brightness (Lux)</label>
                       <span>{field.value}</span>
                     </span>
                     <Slider
@@ -204,7 +204,7 @@ const DeviceStatusDialogView: React.ForwardRefRenderFunction<
                 render={({ field }) => (
                   <React.Fragment>
                     <span className='w-full flex justify-between'>
-                      <label className='font-semibold'>Light Temperature</label>
+                      <label className='font-semibold'>Light Temperature (Kalvin)</label>
                       <span>{field.value}</span>
                     </span>
                     <Slider
